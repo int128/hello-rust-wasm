@@ -20,9 +20,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - run: rustup update stable
+      - run: rustup default stable
       - run: cargo install wasm-pack
       - run: wasm-pack build -t nodejs
       - uses: actions/setup-node@v3
