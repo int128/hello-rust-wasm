@@ -1,0 +1,30 @@
+name: build
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build.yaml
+      - src/**
+      - Cargo.*
+  push:
+    paths:
+      - .github/workflows/build.yaml
+      - src/**
+      - Cargo.*
+    branches:
+      - main
+
+jobs:
+  wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup update stable
+      - run: rustup default stable
+      - run: cargo install wasm-pack
+      - run: wasm-pack build -t nodejs
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: node pkg/hello_rust_wasm.js
